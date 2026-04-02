@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Taxi Tracker</title>
+
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <style>
+        body { margin: 0; }
+        #map { height: 100vh; }
+    </style>
+</head>
+
+<body>
+
+<div id="map"></div>
+
+<script>
+const map = L.map('map').setView([55.75, 37.61], 13);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+}).addTo(map);
+
+const marker = L.marker([55.75, 37.61]).addTo(map);
+
+async function update() {
+    const res = await fetch("http://127.0.0.1:8000/location/1");
+    const data = await res.json();
+
+    if (!data) return;
+
+    marker.setLatLng([data.lat, data.lon]);
+
+    map.setView([data.lat, data.lon]);
+}
+
+setInterval(update, 1000);
+
+</script>
+
+</body>
+</html>

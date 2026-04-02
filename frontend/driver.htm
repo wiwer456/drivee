@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Driver</title>
+</head>
+<body>
+
+<h2>Driver GPS Sender</h2>
+<p id="status">Waiting...</p>
+
+<script>
+navigator.geolocation.watchPosition(
+    (pos) => {
+        const data = {
+            carId: "1",
+            lat: pos.coords.latitude,
+            lon: pos.coords.longitude,
+            speed: pos.coords.speed || 0,
+            timestamp: Date.now() / 1000
+        };
+
+        document.getElementById("status").innerText =
+            `Lat: ${data.lat}, Lon: ${data.lon}`;
+
+        fetch("http://127.0.0.1:8000/location", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+    },
+    (err) => {
+        document.getElementById("status").innerText =
+            "Error: " + err.message;
+    },
+    {
+        enableHighAccuracy: true,
+        maximumAge: 1000
+    }
+);
+</script>
+
+</body>
+</html>

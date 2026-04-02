@@ -1,9 +1,7 @@
 import math
 from storage.memory_store import last_locations
-
 def distance(lat1, lon1, lat2, lon2):
     return math.sqrt((lat1 - lat2)**2 + (lon1 - lon2)**2)
-
 def process_location(loc):
     car_id = loc.carId
 
@@ -19,12 +17,10 @@ def process_location(loc):
 
     dist = distance(prev.lat, prev.lon, loc.lat, loc.lon)
 
-    # анти-скачок
     speed = dist / dt
-    if speed > 0.01:  # подберёшь позже
+    if speed > 0.01:
         return prev
 
-    # сглаживание
     smoothed_lat = (prev.lat + loc.lat) / 2
     smoothed_lon = (prev.lon + loc.lon) / 2
 
